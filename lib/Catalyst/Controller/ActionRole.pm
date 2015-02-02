@@ -1,11 +1,6 @@
-package Catalyst::Controller::ActionRole;
-BEGIN {
-  $Catalyst::Controller::ActionRole::AUTHORITY = 'cpan:ETHER';
-}
-# git description: v0.15-6-g43eca1d
-$Catalyst::Controller::ActionRole::VERSION = '0.16';
-# ABSTRACT: Apply roles to action instances (DEPRECATED)
-
+package Catalyst::Controller::ActionRole; # git description: v0.16-10-ge946d48
+# ABSTRACT: (DEPRECATED) Apply roles to action instances
+our $VERSION = '0.17';
 use Moose;
 use Class::Load qw(load_class load_first_existing_class);
 use Catalyst::Utils;
@@ -13,11 +8,16 @@ use Moose::Meta::Class;
 use String::RewritePrefix 0.004;
 use MooseX::Types::Moose qw/ArrayRef Str RoleName/;
 use List::Util qw(first);
-
-use namespace::clean -except => 'meta';
+use namespace::autoclean;
 
 extends 'Catalyst::Controller';
 
+#pod =head1 DEPRECATION NOTICE
+#pod
+#pod As of version C<5.90013>, L<Catalyst> has merged this functionality into the
+#pod core L<Catalyst::Controller>.  You should no longer use it for new development
+#pod and we recommend switching to the core controller as soon as practical.
+#pod
 #pod =head1 SYNOPSIS
 #pod
 #pod     package MyApp::Controller::Foo;
@@ -31,7 +31,7 @@ extends 'Catalyst::Controller';
 #pod
 #pod =head1 DESCRIPTION
 #pod
-#pod This module allows to apply L<Moose::Role>s to the C<Catalyst::Action>s for
+#pod This module allows one to apply L<Moose::Role>s to the C<Catalyst::Action>s for
 #pod different controller methods.
 #pod
 #pod For that a C<Does> attribute is provided. That attribute takes an argument,
@@ -148,6 +148,10 @@ sub _build__action_roles {
     return \@roles;
 }
 
+#pod =for Pod::Coverage BUILD
+#pod
+#pod =cut
+
 sub BUILD {
     my $self = shift;
     # force this to run at object creation time
@@ -236,20 +240,6 @@ sub _parse_Does_attr {
     return Does => $self->_expand_role_shortname($value);
 }
 
-#pod =begin Pod::Coverage
-#pod
-#pod   BUILD
-#pod
-#pod =end Pod::Coverage
-#pod
-#pod =head1 DEPRECATION NOTICE
-#pod
-#pod As of version C<5.90013>, L<Catalyst> has merged this functionality into the
-#pod core L<Catalyst::Controller>.  You should no longer use it for new development
-#pod and we'd recommend switching to the core controller as soon as practical.
-#pod
-#pod =cut
-
 1;
 
 __END__
@@ -260,11 +250,11 @@ __END__
 
 =head1 NAME
 
-Catalyst::Controller::ActionRole - Apply roles to action instances (DEPRECATED)
+Catalyst::Controller::ActionRole - (DEPRECATED) Apply roles to action instances
 
 =head1 VERSION
 
-version 0.16
+version 0.17
 
 =head1 SYNOPSIS
 
@@ -279,7 +269,7 @@ version 0.16
 
 =head1 DESCRIPTION
 
-This module allows to apply L<Moose::Role>s to the C<Catalyst::Action>s for
+This module allows one to apply L<Moose::Role>s to the C<Catalyst::Action>s for
 different controller methods.
 
 For that a C<Does> attribute is provided. That attribute takes an argument,
@@ -363,6 +353,12 @@ performed.
 
 Gathers the list of roles to apply to an action with the given C<%action_args>.
 
+=head1 DEPRECATION NOTICE
+
+As of version C<5.90013>, L<Catalyst> has merged this functionality into the
+core L<Catalyst::Controller>.  You should no longer use it for new development
+and we recommend switching to the core controller as soon as practical.
+
 =head1 ROLE PREFIX SEARCHING
 
 Roles specified with no prefix are looked up under a set of role prefixes.  The
@@ -370,55 +366,11 @@ first prefix is always C<MyApp::ActionRole::> (with C<MyApp> replaced as
 appropriate for your application); the following prefixes are taken from the
 C<_action_role_prefix> attribute.
 
-=for Pod::Coverage   BUILD
-
-=head1 DEPRECATION NOTICE
-
-As of version C<5.90013>, L<Catalyst> has merged this functionality into the
-core L<Catalyst::Controller>.  You should no longer use it for new development
-and we'd recommend switching to the core controller as soon as practical.
+=for Pod::Coverage BUILD
 
 =head1 AUTHOR
 
 Florian Ragwitz <rafl@debian.org>
-
-=head1 CONTRIBUTORS
-
-=over 4
-
-=item *
-
-Alex J. G. Burzyński <ajgb@ajgb.net>
-
-=item *
-
-Hans Dieter Pearcey <hdp@weftsoar.net>
-
-=item *
-
-Jason Kohles <email@jasonkohles.com>
-
-=item *
-
-John Napiorkowski <jjnapiork@cpan.org>
-
-=item *
-
-Karen Etheridge <ether@cpan.org>
-
-=item *
-
-NAKAGAWA Masaki <masaki.nakagawa@gmail.com>
-
-=item *
-
-Tomas Doran <bobtfish@bobtfish.net>
-
-=item *
-
-William King <william.king@quentustech.com>
-
-=back
 
 =head1 COPYRIGHT AND LICENSE
 
@@ -426,5 +378,49 @@ This software is copyright (c) 2009 by Florian Ragwitz.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
+
+=head1 CONTRIBUTORS
+
+=for stopwords Karen Etheridge Tomas Doran Hans Dieter Pearcey Alex J. G. Burzyński Jason Kohles William King NAKAGAWA Masaki Joenio Costa John Napiorkowski
+
+=over 4
+
+=item *
+
+Karen Etheridge <ether@cpan.org>
+
+=item *
+
+Tomas Doran <bobtfish@bobtfish.net>
+
+=item *
+
+Hans Dieter Pearcey <hdp@weftsoar.net>
+
+=item *
+
+Alex J. G. Burzyński <ajgb@ajgb.net>
+
+=item *
+
+Jason Kohles <email@jasonkohles.com>
+
+=item *
+
+William King <william.king@quentustech.com>
+
+=item *
+
+NAKAGAWA Masaki <masaki.nakagawa@gmail.com>
+
+=item *
+
+Joenio Costa <joenio@cpan.org>
+
+=item *
+
+John Napiorkowski <jjnapiork@cpan.org>
+
+=back
 
 =cut

@@ -1,13 +1,14 @@
 use strict;
 use warnings;
 
-# this test was generated with Dist::Zilla::Plugin::Test::NoTabs 0.08
+# this test was generated with Dist::Zilla::Plugin::Test::EOL 0.17
 
 use Test::More 0.88;
-use Test::NoTabs;
+use Test::EOL;
 
 my @files = (
     'lib/Catalyst/Controller/ActionRole.pm',
+    't/00-report-prereqs.dd',
     't/00-report-prereqs.t',
     't/action-class.t',
     't/basic.t',
@@ -33,22 +34,8 @@ my @files = (
     't/lib/TestApp/Controller/Foo.pm',
     't/lib/TestAppREST.pm',
     't/lib/TestAppREST/ActionRole/Moo.pm',
-    't/lib/TestAppREST/Controller/Foo.pm',
-    'xt/author/00-compile.t',
-    'xt/author/pod-spell.t',
-    'xt/release/changes_has_content.t',
-    'xt/release/cpan-changes.t',
-    'xt/release/distmeta.t',
-    'xt/release/eol.t',
-    'xt/release/kwalitee.t',
-    'xt/release/minimum-version.t',
-    'xt/release/mojibake.t',
-    'xt/release/no-tabs.t',
-    'xt/release/pod-coverage.t',
-    'xt/release/pod-no404s.t',
-    'xt/release/pod-syntax.t',
-    'xt/release/portability.t'
+    't/lib/TestAppREST/Controller/Foo.pm'
 );
 
-notabs_ok($_) foreach @files;
+eol_unix_ok($_, { trailing_whitespace => 1 }) foreach @files;
 done_testing;
